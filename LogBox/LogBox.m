@@ -129,6 +129,19 @@
     return sharedInstance;
 }
 
+- (void)showLogWithContent:(NSString *)content
+{
+    if (!LB_STRING_IS_NOT_NULL(content)) {
+
+        return ;
+    }
+
+    // 初始化
+    [self __enableLogBox];
+
+    [_lbViewController showLogWithContent:content];
+}
+
 - (void)__enableLogBox
 {
     [self __initLogboxWindow];
@@ -144,20 +157,7 @@
     swipeCloseGesture.numberOfTouchesRequired = 3;
     swipeCloseGesture.direction = UISwipeGestureRecognizerDirectionRight;
     [_logBoxWindow addGestureRecognizer:swipeCloseGesture];
-
-}
-
-- (void)showLogWithContent:(NSString *)content
-{
-    if (!LB_STRING_IS_NOT_NULL(content)) {
-
-        return ;
-    }
-
-    // 初始化
-    [self __enableLogBox];
-
-    [_lbViewController showLogWithContent:content];
+    
 }
 
 - (void)__onSwipeOpenDetected:(UISwipeGestureRecognizer *)gesture
