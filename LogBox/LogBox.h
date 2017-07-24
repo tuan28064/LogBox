@@ -8,13 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-#define __LOG_BOX__(content) [[LogBox sharedInstance] showLogWithContent:content];
+#define __LOG_BOX__(log) [[LogBox sharedInstance] showLogWithContent:[NSString stringWithFormat:@"%s__%d行 \n %@ \n", __func__, __LINE__, log]];
 
 @interface LogBox : NSObject
 
 + (instancetype)sharedInstance;
-
-- (void)enableLogBox;
 
 - (void)showLogWithContent:(NSString *)content;
 

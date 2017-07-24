@@ -18,8 +18,9 @@
 
 @interface LBViewController : UIViewController <UITextViewDelegate>
 
-@property (nonatomic, strong) UITextView     *lbTextView;
-@property (nonatomic, strong) NSMutableArray *lbLogArray;
+@property (nonatomic, strong) UITextView      *lbTextView;
+@property (nonatomic, strong) NSMutableArray  *lbLogArray;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
 @end
 
@@ -48,9 +49,11 @@
         // log不为空，初始化
         [self __initTextView];
         [self __initLogArray];
+        [self __initDateFormatter];
 
         [_lbLogArray addObject:content];
 
+        // 打印
         [self __printLog];
     }
 }
@@ -59,34 +62,46 @@
 {
     NSMutableString *logString = [NSMutableString string];
     for (NSString *string in _lbLogArray) {
-        [logString appendFormat:@"%@\n", string];
+        [logString appendFormat:@"%@ \n %@ \n", [_dateFormatter stringFromDate:[NSDate date]], string];
     }
 
     _lbTextView.text = logString;
+
+    // 滚动到最后一行
+    [_lbTextView scrollRangeToVisible:NSMakeRange(_lbTextView.text.length, 1)];
 }
 
 - (void)__initTextView
 {
     if (!_lbTextView) {
 
-        CGRect tableFrame = self.view.frame;
-        _lbTextView = [[UITextView alloc]initWithFrame:CGRectMake(0, 0, tableFrame.size.width - LBWindowPadding * 2, tableFrame.size.height - LBTabBarHeight - LBWindowPadding * 2)];
+        CGRect textViewFrame = [UIScreen mainScreen].bounds;
+        _lbTextView = [[UITextView alloc]initWithFrame:CGRectMake(0, 0, textViewFrame.size.width - LBWindowPadding * 2, textViewFrame.size.height - LBTabBarHeight - LBWindowPadding * 2)];
         _lbTextView.backgroundColor = [UIColor clearColor];
         _lbTextView.delegate = self;
         _lbTextView.font = [UIFont systemFontOfSize:14.0];
         _lbTextView.textColor = [UIColor redColor];
         _lbTextView.textAlignment = NSTextAlignmentLeft;
         _lbTextView.editable = NO;
+        _lbTextView.backgroundColor = [UIColor yellowColor];
         _lbTextView.selectable = NO;
-    }
 
-    [self.view addSubview:_lbTextView];
+        [self.view addSubview:_lbTextView];
+    }
 }
 
 - (void)__initLogArray
 {
     if (!_lbLogArray) {
         _lbLogArray = [[NSMutableArray alloc]init];
+    }
+}
+
+- (void)__initDateFormatter
+{
+    if (!_dateFormatter) {
+        _dateFormatter = [[NSDateFormatter alloc]init];
+        [_dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.sss"];
     }
 }
 
@@ -115,9 +130,8 @@
     return sharedInstance;
 }
 
-- (void)enableLogBox
+- (void)__enableLogBox
 {
-
     [self __initLogboxWindow];
 
     // 添加开启手势
@@ -138,13 +152,11 @@
 {
     if (!LB_STRING_IS_NOT_NULL(content)) {
 
-        // log为空，不显示界面
-        _logBoxWindow.hidden = YES;
-
-
         return ;
     }
 
+    // 初始化
+    [self __enableLogBox];
 
     [_lbViewController showLogWithContent:content];
 }
@@ -163,11 +175,11 @@
 {
     if (!_logBoxWindow) {
 
-        CGRect keyFrame = [UIScreen mainScreen].bounds;
-        keyFrame.origin.y += LBTabBarHeight;
-        keyFrame.size.height -= LBTabBarHeight;
+        CGRect originFrame = [UIScreen mainScreen].bounds;
+        originFrame.origin.y += LBTabBarHeight;
+        originFrame.size.height -= LBTabBarHeight;
 
-        _logBoxWindow = [[UIWindow alloc] initWithFrame:CGRectInset(keyFrame, LBWindowPadding, LBWindowPadding)];
+        _logBoxWindow = [[UIWindow alloc] initWithFrame:CGRectInset(originFrame, LBWindowPadding, LBWindowPadding)];
         _logBoxWindow.backgroundColor = [UIColor lightGrayColor];
         _logBoxWindow.layer.borderColor = LBThemeColor.CGColor;
         _logBoxWindow.layer.borderWidth = 2.0;
@@ -177,6 +189,7 @@
         _logBoxWindow.rootViewController = _lbViewController;
 
     }
+    _logBoxWindow.hidden = NO;
 }
 
 @end
