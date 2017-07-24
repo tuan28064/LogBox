@@ -135,13 +135,13 @@
 
     // 添加开启手势
     UISwipeGestureRecognizer *swipeOpenGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(__onSwipeOpenDetected:)];
-    swipeOpenGesture.numberOfTouchesRequired = 1;
+    swipeOpenGesture.numberOfTouchesRequired = 3;
     swipeOpenGesture.direction = UISwipeGestureRecognizerDirectionLeft;
     [[UIApplication sharedApplication].keyWindow addGestureRecognizer:swipeOpenGesture];
 
     // 添加关闭手势
     UISwipeGestureRecognizer *swipeCloseGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(__onSwipeCloseDetected:)];
-    swipeCloseGesture.numberOfTouchesRequired = 1;
+    swipeCloseGesture.numberOfTouchesRequired = 3;
     swipeCloseGesture.direction = UISwipeGestureRecognizerDirectionRight;
     [_logBoxWindow addGestureRecognizer:swipeCloseGesture];
 
