@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define __LOG_BOX__(log) [[LogBox sharedInstance] showLogWithContent:[NSString stringWithFormat:@"%s__%d行 \n %@ \n", __func__, __LINE__, log]];
+#define __LOG_BOX__(log) [[LogBox sharedInstance] showLogWithContent:[NSString stringWithFormat:@"%s__[第%d行] \n %@ \n", __func__, __LINE__, log]];
 
 @interface LogBox : NSObject
 

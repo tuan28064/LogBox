@@ -83,7 +83,6 @@
         _lbTextView.textColor = [UIColor redColor];
         _lbTextView.textAlignment = NSTextAlignmentLeft;
         _lbTextView.editable = NO;
-        _lbTextView.backgroundColor = [UIColor yellowColor];
         _lbTextView.selectable = NO;
 
         [self.view addSubview:_lbTextView];
